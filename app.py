@@ -23,8 +23,9 @@ def main() -> None:
     le, panel, death = load_data()
     mr = train_model(panel)
 
-    page = render_sidebar(panel, mr)
-    _ROUTES[page](le, panel, death, mr)
+    if True:
+        page = render_sidebar(panel, mr)
+        _ROUTES[page](le, panel, death, mr)
 
 
 if __name__ == "__main__":
