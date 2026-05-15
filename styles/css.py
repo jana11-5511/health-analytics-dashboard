@@ -8,6 +8,10 @@ def inject_global_css() -> None:
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
+    :root {{
+        color-scheme: light !important;
+    }}
+
     html, body, [class*="css"], .stApp, p, span, div, h1, h2, h3, h4, h5, h6, label {{
         font-family: 'Inter', sans-serif;
         color: {TEXT} !important;
@@ -49,6 +53,8 @@ def inject_global_css() -> None:
         background: linear-gradient(to right, {ACCENT}, {PURPLE}, transparent);
         margin: 0.75rem 0 0.85rem 0;
         opacity: 0.35;
+        pointer-events: none;
+        user-select: none;
     }}
 
     /* SIDEBAR */
@@ -172,12 +178,14 @@ def inject_global_css() -> None:
         margin-top: 0.5rem !important;
         margin-bottom: 1rem !important;
         overflow: hidden !important;
+        color-scheme: light !important;
     }}
     [data-testid="stPlotlyChart"] > div {{
         border: none !important;
         box-shadow: none !important;
-        background: transparent !important;
+        background: #FFFFFF !important;
         width: 100% !important;
+        color-scheme: light !important;
     }}
 
     /* SLIDER */
@@ -223,18 +231,23 @@ def inject_global_css() -> None:
         margin-bottom: 0.8rem;
         overflow: hidden;
     }}
-    /* ── DARK MODE OVERRIDE ── */
-    @media (prefers-color-scheme: dark) {
+
+    /* DARK MODE — força light en tot l'app */
+    @media (prefers-color-scheme: dark) {{
+        :root {{ color-scheme: light !important; }}
+        html, body, .stApp {{ background: {BG} !important; }}
         html, body, [class*="css"], .stApp, p, span, div,
-        h1, h2, h3, h4, h5, h6, label {
+        h1, h2, h3, h4, h5, h6, label {{
             color: {TEXT} !important;
-        }
-        .stApp {
-            background: {BG} !important;
-        }
-        [data-testid="stPlotlyChart"] {
+        }}
+        [data-testid="stPlotlyChart"],
+        [data-testid="stPlotlyChart"] > div {{
             background: #FFFFFF !important;
-        }
-    }
+            color-scheme: light !important;
+        }}
+        [data-testid="stMetric"] {{
+            background: #FFFFFF !important;
+        }}
+    }}
     </style>
     """, unsafe_allow_html=True)
