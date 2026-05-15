@@ -223,5 +223,18 @@ def inject_global_css() -> None:
         margin-bottom: 0.8rem;
         overflow: hidden;
     }}
+    /* ── DARK MODE OVERRIDE ── */
+    @media (prefers-color-scheme: dark) {
+        html, body, [class*="css"], .stApp, p, span, div,
+        h1, h2, h3, h4, h5, h6, label {
+            color: {TEXT} !important;
+        }
+        .stApp {
+            background: {BG} !important;
+        }
+        [data-testid="stPlotlyChart"] {
+            background: #FFFFFF !important;
+        }
+    }
     </style>
     """, unsafe_allow_html=True)
