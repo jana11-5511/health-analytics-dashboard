@@ -62,7 +62,7 @@ def render_sidebar(df: pd.DataFrame, mr: ModelResult | None) -> str:
             {_stats_row("Países", str(n_paises))}
             {_stats_row("Período", year_range)}
             {_stats_row("RMSE Train", f"{fmt(mr.rmse_train if mr else 0)} años")}
-            {_stats_row("RMSE Test ", f"{fmt(mr.rmse_test if mr else 0)} años", highlight=True)}
+            {_stats_row("RMSE Test", f"{fmt(mr.rmse_test if mr else 0)} años", highlight=True)}
             {_stats_row("CV 5-fold", f"{fmt(mr.rmse_cv if mr else 0)} años")}
         </div>
         """, unsafe_allow_html=True)
