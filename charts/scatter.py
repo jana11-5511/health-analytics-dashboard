@@ -4,11 +4,13 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import scipy.stats as stats
+import streamlit as st
 
 from charts.base import apply_base_layout
 from styles.theme import ACCENT_3, GDP_COLOR_SCALE, LINE, MUTED, WARN
 
 
+@st.cache_data(show_spinner=False)
 def gdp_scatter(pm: pd.DataFrame) -> go.Figure:
     fig = px.scatter(
         pm, x="gdp_log", y="life_expectancy", hover_name="Entity",
@@ -20,7 +22,6 @@ def gdp_scatter(pm: pd.DataFrame) -> go.Figure:
         marker=dict(size=9, line=dict(width=0.8, color="#0c4a6e")),
         hovertemplate="<b>%{hovertext}</b><br>PIB (log₁₀): %{x:.2f}<br>EV: %{y:.1f} años<extra></extra>",
     )
-
     _, _, r, _, _ = stats.linregress(pm["gdp_log"], pm["life_expectancy"])
     fig.add_annotation(
         x=pm["gdp_log"].max() - 0.3, y=pm["life_expectancy"].min() + 3,
@@ -28,11 +29,10 @@ def gdp_scatter(pm: pd.DataFrame) -> go.Figure:
         font=dict(size=12, color=ACCENT_3),
         bgcolor="white", bordercolor=LINE, borderwidth=1, borderpad=6,
     )
-
     apply_base_layout(fig, height=450, margin=dict(l=10, r=20, t=10, b=40))
     fig.update_layout(coloraxis_showscale=False)
-    fig.update_xaxes(showgrid=False, title="PIB per cápita (log₁₀ USD)")
-    fig.update_yaxes(showgrid=True, gridcolor=LINE, title="Esperanza de vida (años)")
+    fig.update_xaxes(showgrid=False, title="PIB per cápita (log₁₀ USD)", color="#334155")
+    fig.update_yaxes(showgrid=True, gridcolor=LINE, title="Esperanza de vida (años)", color="#334155")
     return fig
 
 
@@ -66,7 +66,7 @@ def residual_plot(resid: pd.DataFrame, rmse_train: float) -> go.Figure:
 
     apply_base_layout(fig, height=480, margin=dict(l=10, r=30, t=10, b=50))
     fig.update_xaxes(title="Esperanza de vida predicha (años)", showgrid=False,
-                     tickformat=".1f", nticks=7)
+                     tickformat=".1f", nticks=7, color="#334155")
     fig.update_yaxes(title="Residual (real − predicho)", gridcolor=LINE,
-                     tickformat=".1f", nticks=6, side="left")
+                     tickformat=".1f", nticks=6, side="left", color="#334155")
     return fig
