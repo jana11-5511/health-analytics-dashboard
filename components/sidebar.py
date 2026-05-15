@@ -40,11 +40,12 @@ def render_sidebar(df: pd.DataFrame, mr: ModelResult | None) -> str:
         </div>
         """, unsafe_allow_html=True)
 
-        st.markdown("<br><br><br>", unsafe_allow_html=True)
         st.markdown('<span class="sb-section-label">Navegación</span>', unsafe_allow_html=True)
         st.radio("nav", list(PAGES), key="page", label_visibility="collapsed")
 
-        st.markdown("<div style='height: 15vh;'></div>", unsafe_allow_html=True)
+        st.write("")
+        st.write("")
+        st.write("")
         st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
 
         n_paises = df["Code"].nunique() if "Code" in df.columns else "N/D"
