@@ -66,5 +66,6 @@ def render_sidebar(df: pd.DataFrame, mr: ModelResult | None) -> str:
             {_stats_row("CV 5-fold", f"{fmt(mr.rmse_cv    if mr else 0)} años")}
         </div>
         """, unsafe_allow_html=True)
+        st.container()
 
     return st.session_state.page
