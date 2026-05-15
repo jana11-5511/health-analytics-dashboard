@@ -46,8 +46,8 @@ def render_sidebar(df: pd.DataFrame, mr: ModelResult | None) -> str:
         st.write("")
         st.write("")
         st.write("")
-        st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
-
+        st.markdown('<div class="divider">&#8203;</div>', unsafe_allow_html=True)
+        
         n_paises = df["Code"].nunique() if "Code" in df.columns else "N/D"
         year_range = (f"{int(df['Year'].min())} – {int(df['Year'].max())}"
                       if "Year" in df.columns else "2000 – 2019")
