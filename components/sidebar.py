@@ -56,8 +56,7 @@ def render_sidebar(df: pd.DataFrame, mr: ModelResult | None) -> str:
 
         st.markdown(f"""
         <div style="padding-bottom:1rem;">
-            <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;
-                        letter-spacing:0.1em;color:rgba(255,255,255,0.28);margin-bottom:0.7rem;">
+            <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.28);margin-bottom:0.7rem;">
                 Rendimiento del Modelo
             </div>
             {_stats_row("Países", str(n_paises))}
