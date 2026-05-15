@@ -7,7 +7,7 @@ from charts.bars import signed_bar
 from charts.scatter import gdp_scatter
 from components.layout import page_header, section_header
 from config import PREDICTOR_MAP
-from services.analytics import gdp_panel_data, predictor_correlations
+from services.analytics import predictor_correlations
 from services.model import ModelResult
 from utils.text import wrap_title
 
