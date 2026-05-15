@@ -1,9 +1,15 @@
 """Plotly defaults shared across chart modules."""
 import plotly.graph_objects as go
+import plotly.io as pio
 
 from styles.theme import FONT_FAMILY, LINE, TRANSPARENT_BG
 
+# Força el template light globalment per a tots els gràfics
+pio.templates.default = "plotly_white"
+
 DEFAULT_CONFIG = {"displayModeBar": "hover"}
+
+CHART_BG = "#FFFFFF"
 
 
 def apply_base_layout(fig: go.Figure, *, height: int, margin: dict | None = None,
@@ -12,10 +18,11 @@ def apply_base_layout(fig: go.Figure, *, height: int, margin: dict | None = None
     fig.update_layout(
         height=height,
         margin=margin or dict(l=10, r=20, t=10, b=40),
-        paper_bgcolor=TRANSPARENT_BG,
-        plot_bgcolor=TRANSPARENT_BG,
-        font=dict(family=FONT_FAMILY),
+        paper_bgcolor=CHART_BG,
+        plot_bgcolor=CHART_BG,
+        font=dict(family=FONT_FAMILY, color="#334155"),
         showlegend=showlegend,
+        template="plotly_white",
     )
     return fig
 
