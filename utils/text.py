@@ -25,8 +25,9 @@ def wrap_title(text: str, width: int = 22) -> str:
 # Reglas de categorización por keyword matching sobre el nombre de la causa
 # (en inglés, lowercase). El orden importa: la primera regla que matchea gana.
 # Las 7 macro-categorías son las mismas que define el notebook §3.8.1.
-# Si una causa no matchea ninguna keyword, cae a 'Otras' como fallback —
-# eso debería ser un caso anómalo, no una categoría visible en gráficos.
+# Si una causa no matchea ninguna keyword, cae a 'Otras' como fallback
+# defensivo — con las keywords actuales todas las 31 causas del notebook
+# se asignan correctamente.
 _CATEGORY_RULES = (
     ('Salud mental/Adicciones', [
         'mental', 'drug use', 'alcohol use', 'substance', 'self-harm',
