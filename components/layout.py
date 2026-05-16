@@ -4,9 +4,15 @@ import streamlit as st
 from styles.theme import MUTED, TEXT
 
 
-def page_header(title: str, subtitle: str) -> None:
+def page_header(title: str, subtitle: str, caption: str = "") -> None:
     st.title(title)
-    st.markdown(f"<p class='page-subtitle'>{subtitle}</p>", unsafe_allow_html=True)
+    st.markdown(
+        f"<p class='page-subtitle'>{subtitle}</p>",
+        unsafe_allow_html=True,
+    )
+
+    if caption:
+        st.caption(caption)
 
 
 def section_header(title: str, subtitle: str = "") -> None:
