@@ -63,7 +63,7 @@ def render(le: pd.DataFrame, panel: pd.DataFrame, mr: ModelResult | None) -> Non
         return
 
     c1, c2, c3, c4 = st.columns(4)
-    c1.metric("R² CV GroupKFold(5)", "f"{mr.r2_cv:.3f}", f"Split aleatorio: {mr.rmse_cv:.3f}")
+    c1.metric("R² CV GroupKFold(5)", f"{mr.r2_cv:.3f}", f"Split aleatorio: {mr.rmse_cv:.3f}")
     c2.metric("Predictores socioeconómicos", f"{len(mr.available_preds)}", "variables en el modelo")
     c3.metric("Observaciones", f"{len(mr.df_train):,}", "filas país-año")
     c4.metric("RMSE CV GroupKFold(5)", f"{mr.rmse_test:.2f} años", f"Split aleatorio: {mr.rmse_test:.2f} años")
