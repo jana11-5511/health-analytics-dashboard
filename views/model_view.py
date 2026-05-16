@@ -6,7 +6,7 @@ from charts.base import DEFAULT_CONFIG
 from charts.bars import signed_bar
 from charts.scatter import gdp_scatter
 from components.layout import page_header, section_header
-from config import PREDICTOR_MAP
+from config import PREDICTOR_LABEL_OVERRIDE
 from services.analytics import predictor_correlations
 from services.model import ModelResult
 from utils.numeric import safe_log10
@@ -24,9 +24,10 @@ def _correlation_chart(corr_df: pd.DataFrame):
     )
 
 
-def _coefficient_chart(mr: ModelResult):
-    coef = mr.coef.copy()
-    coef.index = [PREDICTOR_MAP.get(i, i) for i in coef.index]
+def _coefficient_chart(mr: ModelResult):     
+    coef = mr.coef.copy()     
+    label_map = {**PREDICTOR_MAP, **PREDICTOR_LABEL_OVERRIDE}     
+    coef.index = [label_map.get(i, i) for i in coef.index]
     coef = coef.sort_values().reset_index()
     coef.columns = ["Variable", "Coef"]
     return signed_bar(
