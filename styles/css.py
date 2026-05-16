@@ -75,7 +75,7 @@ def inject_global_css() -> None:
         display: none !important;
     }}
     section[data-testid="stSidebar"] .stRadio > div > label {{
-        display: flex !important;
+        display: none !important;
         width: 100% !important;
         min-height: 50px !important;
         align-items: center !important;
