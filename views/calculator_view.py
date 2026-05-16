@@ -36,7 +36,7 @@ def _render_sliders(mr: ModelResult) -> dict:
     return sliders
 
 
-def render(le, panel, mr: ModelResult | None) -> None:
+def render(le, panel, mr: Optional[ModelResult] = None) -> None:
     page_header(
         "Calculadora",         
         "Simula la esperanza de vida para cualquier combinación de indicadores socioeconómicos."        
