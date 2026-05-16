@@ -1,10 +1,10 @@
-"""Ridge regression pipeline."""
+"""OLS regression pipeline (Modelo Socioeconómico"""
 from dataclasses import dataclass
 
 import numpy as np
 import pandas as pd
 import streamlit as st
-from sklearn.linear_model import Ridge
+from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.model_selection import cross_val_score, train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -15,7 +15,7 @@ from utils.numeric import safe_log10
 
 @dataclass
 class ModelResult:
-    model: Ridge
+    model: LinearRegression
     scaler: StandardScaler
     train_pred: np.ndarray
     test_pred: np.ndarray
@@ -73,13 +73,13 @@ def train_model(panel: pd.DataFrame) -> ModelResult | None:
     X_tr_s = scaler.fit_transform(X_tr)
     X_te_s = scaler.transform(X_te)
 
-    model = Ridge(alpha=1.0).fit(X_tr_s, y_tr)
+    model = LinearRegression().fit(X_tr_s, y_tr)
     train_pred = model.predict(X_tr_s)
     test_pred  = model.predict(X_te_s)
 
     cv_scores = cross_val_score(
-        Ridge(alpha=1.0),
-        scaler.fit_transform(df[features].values),
+        LinearRegression(),
+        scaler.fit_transform,
         df["life_expectancy"].values,
         cv=5, scoring="neg_root_mean_squared_error",
     )
