@@ -57,32 +57,30 @@ def inject_global_css() -> None:
         user-select: none;
     }}
 
-    /* SIDEBAR */
+    /* SIDEBAR — sempre visible, boto de plegar amagat */
     section[data-testid="stSidebar"] {{
         background: #0F172A !important;
         border-right: 1px solid rgba(255,255,255,0.05);
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        height: 100vh !important;
-        z-index: 999 !important;
+        min-width: 240px !important;
+        max-width: 300px !important;
         transform: none !important;
-        transition: none !important;
+        visibility: visible !important;
+        display: block !important;
     }}
     section[data-testid="stSidebar"] * {{ color: #e2e8f0 !important; }}
- 
-    /* Amaguem el botó de plegar */
-    [data-testid="collapsedControl"] {{
+
+    [data-testid="collapsedControl"],
+    button[kind="header"] {{
         display: none !important;
     }}
- 
+
     [data-testid="stSidebarUserContent"] {{
         padding-top: 0.5rem !important;
         display: flex;
         flex-direction: column;
         height: 100%;
     }}
- 
+
     section[data-testid="stSidebar"] .stRadio > div > label > div:first-child {{
         display: none !important;
     }}
@@ -108,7 +106,7 @@ def inject_global_css() -> None:
         border: 1px solid rgba(6,182,212,0.40) !important;
         box-shadow: 0 0 18px rgba(6,182,212,0.16) !important;
     }}
- 
+
     .sb-section-label {{
         font-size: 0.62rem;
         font-weight: 700;
@@ -118,7 +116,7 @@ def inject_global_css() -> None:
         margin-bottom: 0.4rem;
         display: block;
     }}
- 
+
     .sb-footer {{
         margin-top: auto;
         padding: 1.25rem 0 0.5rem 0;
@@ -244,7 +242,7 @@ def inject_global_css() -> None:
         overflow: hidden;
     }}
 
-    /* DARK MODE — força light en tot l'app */
+    /* DARK MODE */
     @media (prefers-color-scheme: dark) {{
         :root {{ color-scheme: light !important; }}
         html, body, .stApp {{ background: {BG} !important; }}
@@ -262,4 +260,15 @@ def inject_global_css() -> None:
         }}
     }}
     </style>
+
+    <script>
+        const keepSidebarOpen = () => {
+            const sidebar = window.parent.document.querySelector('[data-testid="stSidebar"]');
+            if (sidebar && sidebar.getAttribute('aria-expanded') === 'false') {
+                const btn = window.parent.document.querySelector('[data-testid="collapsedControl"] button');
+                if (btn) btn.click();
+            }
+        };
+        setInterval(keepSidebarOpen, 300);
+    </script>
     """, unsafe_allow_html=True)
