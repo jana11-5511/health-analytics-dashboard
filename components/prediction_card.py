@@ -10,7 +10,7 @@ def render_prediction_card(pred: float, global_avg: float, mr: ModelResult) -> N
     diff_color = ACCENT_3 if diff >= 0 else WARN
     diff_sign = "+" if diff >= 0 else ""
     pct = (pred - 40) / (90 - 40) * 100
-    lo = max(40, pred - 1.96 * mr.resid_std)
+    lo = max(40, pred - 2 * mr.rmse_cv)\n hi = min(90, pred + 2 * mr.rmse_cv)
     hi = min(90, pred + 1.96 * mr.resid_std)
 
     st.markdown(f"""
@@ -46,7 +46,7 @@ def render_prediction_card(pred: float, global_avg: float, mr: ModelResult) -> N
             <div style="flex:1; background:#F8FAFC; border-radius:12px; padding:0.9rem;
                         text-align:center; border:1px solid {LINE};">
                 <div style="font-size:0.65rem; font-weight:700; text-transform:uppercase;
-                            color:{MUTED};">IC Aprox. 95%</div>
+                            color:{MUTED};">IC Aprox. 95% (±2·RMSE CV)</div>
                 <div style="font-size:1rem; font-weight:700; color:{TEXT}; margin-top:0.2rem;">
                     {lo:.1f} – {hi:.1f}
                 </div>
@@ -54,9 +54,9 @@ def render_prediction_card(pred: float, global_avg: float, mr: ModelResult) -> N
             <div style="flex:1; background:#F8FAFC; border-radius:12px; padding:0.9rem;
                         text-align:center; border:1px solid {LINE};">
                 <div style="font-size:0.65rem; font-weight:700; text-transform:uppercase;
-                            color:{MUTED};">Error modelo Test</div>
+                            color:{MUTED};">RMSE CV GroupKFold(5)</div>
                 <div style="font-size:1rem; font-weight:700; color:{TEXT}; margin-top:0.2rem;">
-                    ± {mr.rmse_test:.2f} años
+                    ± {mr.rmse_cv:.2f} años
                 </div>
             </div>
         </div>
