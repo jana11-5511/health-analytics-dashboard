@@ -1,16 +1,11 @@
 """Interactive calculator view."""
 import streamlit as st
 
-from components.layout 
-import page_header, section_header
-from components.prediction_card 
-import render_prediction_card
-from config 
-import PREDICTOR_MAP
-from services.model 
-import ModelResult, predict_life_expectancy
-from utils.numeric 
-import safe_slider_range
+from components.layout import page_header, section_header
+from components.prediction_card import render_prediction_card
+from config import PREDICTOR_MAP
+from services.model import ModelResult, predict_life_expectancy
+from utils.numeric import safe_slider_range
 
 
 def _render_sliders(mr: ModelResult) -> dict:
