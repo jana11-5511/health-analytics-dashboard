@@ -61,8 +61,20 @@ def inject_global_css() -> None:
     section[data-testid="stSidebar"] {{
         background: #0F172A !important;
         border-right: 1px solid rgba(255,255,255,0.05);
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        height: 100vh !important;
+        z-index: 999 !important;
+        transform: none !important;
+        transition: none !important;
     }}
     section[data-testid="stSidebar"] * {{ color: #e2e8f0 !important; }}
+
+    /* Amaguem el botó de plegar */
+    [data-testid="collapsedControl"] {{
+        display: none !important;
+    }}
 
     [data-testid="stSidebarUserContent"] {{
         padding-top: 0.5rem !important;
@@ -75,7 +87,7 @@ def inject_global_css() -> None:
         display: none !important;
     }}
     section[data-testid="stSidebar"] .stRadio > div > label {{
-        display: none !important;
+        display: flex !important;
         width: 100% !important;
         min-height: 50px !important;
         align-items: center !important;
@@ -87,12 +99,6 @@ def inject_global_css() -> None:
         padding: 0.5rem 1rem !important;
         transition: all 0.2s ease;
     }}
-
-    /* Amaguem el botó de plegar */
-    [data-testid="collapsedControl"] {{
-        display: none !important;
-    }}
-    
     section[data-testid="stSidebar"] .stRadio > div > label:hover {{
         background: rgba(6,182,212,0.08) !important;
         border-color: rgba(6,182,212,0.25) !important;
