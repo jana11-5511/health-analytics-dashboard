@@ -39,9 +39,9 @@ def _render_sliders(mr: ModelResult) -> dict:
 def render(le, panel, mr: ModelResult | None) -> None:
     page_header(
         "Calculadora",         
-        "Simula la esperanza de vida para cualquier combinación de indicadores socioeconómicos. ",         
-        "No se usan etiquetas de 'desarrollado' o 'subdesarrollado': un mismo nivel de PIB ",      
-        "puede coexistir con estructuras sanitarias muy distintas, y cualquier clasificación ",         
+        "Simula la esperanza de vida para cualquier combinación de indicadores socioeconómicos."        
+        "No se usan etiquetas de 'desarrollado' o 'subdesarrollado': un mismo nivel de PIB"     
+        "puede coexistir con estructuras sanitarias muy distintas, y cualquier clasificación"   
         "binaria añade sesgo sin aportar capacidad predictiva.",
     )
 
