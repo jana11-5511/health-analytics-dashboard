@@ -6,7 +6,8 @@ from charts.base import DEFAULT_CONFIG
 from charts.bars import signed_bar
 from charts.scatter import gdp_scatter
 from components.layout import page_header, section_header
-from config import PREDICTOR_LABEL_OVERRIDE, PREDICTOR_MAP
+from config import PREDICTOR_LABEL_OVERRIDE 
+from config import PREDICTOR_MAP
 from services.analytics import predictor_correlations
 from services.model import ModelResult
 from utils.numeric import safe_log10
