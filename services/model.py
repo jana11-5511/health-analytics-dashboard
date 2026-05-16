@@ -78,11 +78,12 @@ def train_model(panel: pd.DataFrame) -> ModelResult | None:
     test_pred  = model.predict(X_te_s)
 
     cv_scores = cross_val_score(
-        LinearRegression(),
-        scaler.fit_transform,
-        df["life_expectancy"].values,
-        cv=5, scoring="neg_root_mean_squared_error",
-    )
+    LinearRegression(),
+    scaler.fit_transform(df[features].values),
+    df["life_expectancy"].values,
+    cv=5,
+    scoring="neg_root_mean_squared_error",
+)
 
     return ModelResult(
         model=model,
