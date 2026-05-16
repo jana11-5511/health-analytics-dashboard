@@ -13,21 +13,18 @@ def predictor_correlations(panel: pd.DataFrame) -> pd.DataFrame:
     Correlación bivariada (Pearson) entre cada predictor y la esperanza de vida.
 
     Se calcula sobre la media 2000-2019 por país (cross-sectional), espejo del
-    notebook §3.3-§3.7. Esto es importante: las observaciones país-año del
-    mismo país no son independientes (la EV de Mali en 2010 está muy correlada
-    con la de Mali en 2011), así que correlar sobre el panel completo infla
-    artificialmente los coeficientes.
+    notebook §3.3-§3.7. Las observaciones país-año del mismo país no son
+    independientes; correlar sobre el panel completo infla artificialmente
+    los coeficientes.
 
     Caso especial PIB: se aplica log10 antes de Pearson porque la relación
-    PIB↔EV es la curva de Preston (cóncava). Pearson sobre PIB raw subestima
-    la fuerza real de la asociación — el notebook §3.3 reporta r ≈ +0.83
-    sobre log10(PIB), no sobre PIB raw.
+    PIB↔EV es la curva de Preston (cóncava). Espejo del §3.3 del notebook,
+    que reporta r ≈ +0.83 sobre log10(PIB).
     """
     if "Code" not in panel.columns or "life_expectancy" not in panel.columns:
         return pd.DataFrame(columns=["Variable", "col_orig", "Correlación"])
 
-    # Media 2000-2019 por país: una fila por país. Espejo de
-    # `get_mean_data` del notebook §3.
+    # Media 2000-2019 por país: una fila por país. Espejo de `get_mean_data`.
     panel_mean = (
         panel.groupby("Code", as_index=False)
              .mean(numeric_only=True)
@@ -46,8 +43,7 @@ def predictor_correlations(panel: pd.DataFrame) -> pd.DataFrame:
         y = s["life_expectancy"]
 
         # log10 solo para PIB (curva de Preston). Pobreza, gasto sanitario y
-        # coberturas vacunales se mantienen sin transformar — son aproximada-
-        # mente lineales con la EV en el rango del panel.
+        # coberturas vacunales se mantienen sin transformar.
         if pred == "gdp_per_capita":
             x = np.log10(x.clip(lower=1))   # clip defensivo por si hay 0 o negativos
 
@@ -67,8 +63,7 @@ def predictor_correlations(panel: pd.DataFrame) -> pd.DataFrame:
 def cause_correlations(death: pd.DataFrame, le: pd.DataFrame) -> pd.DataFrame:
     """
     Correlación cross-sectional entre cada causa de muerte y la esperanza de vida.
-    Media 2000-2019 por país (espejo del notebook §3.8). Sin cambios respecto a
-    la versión anterior — esta función ya estaba bien.
+    Media 2000-2019 por país (espejo del notebook §3.8).
     """
     cause_cols = [c for c in death.columns if "Rate per 100k" in c]
     if "Code" not in death.columns or "Code" not in le.columns:
