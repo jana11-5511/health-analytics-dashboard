@@ -260,13 +260,13 @@ def inject_global_css() -> None:
     </style>
 
     <script>
-        const keepSidebarOpen = () => {
+        const keepSidebarOpen = () => {{
             const sidebar = window.parent.document.querySelector('[data-testid="stSidebar"]');
-            if (sidebar && sidebar.getAttribute('aria-expanded') === 'false') {
+            if (sidebar && sidebar.getAttribute('aria-expanded') === 'false') {{
                 const btn = window.parent.document.querySelector('[data-testid="collapsedControl"] button');
                 if (btn) btn.click();
-            }
-        };
+            }}
+        }};
         setInterval(keepSidebarOpen, 300);
     </script>
                 
