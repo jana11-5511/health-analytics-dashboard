@@ -29,7 +29,9 @@ def _render_top10(le_2019: pd.DataFrame) -> None:
 def render(le: pd.DataFrame) -> None:
     page_header(
         "Exploración Global",
-        "Mapa mundial, evolución temporal y distribución de la esperanza de vida entre 2000 y 2019.",
+        "Mapa mundial, evolución temporal y distribución de la esperanza de vida entre 2000 y 2019. ",
+        "Mapa y rankings sobre cobertura completa de OWID (~235 países). ",
+        "El modelo predictivo se entrena sobre el panel restringido de 148 países (ver pestaña Modelo).",
     )
 
     le_2019 = le[le["Year"] == 2019]
