@@ -53,8 +53,10 @@ def render(le: pd.DataFrame, panel: pd.DataFrame, death: pd.DataFrame,
            mr: ModelResult | None) -> None:
     page_header(
         "Causas de Muerte",
-        "Correlaciones entre causas de muerte y esperanza de vida y análisis "
-        "de residuales del modelo.",
+        "Correlaciones entre las principales causas de muerte y la esperanza de vida. "
+        "Los datasets de suicidios y homicidios se analizaron pero no se incluyeron como "
+        "predictores: la correlación con la EV es moderada y ambas variables presentan "
+        "problemas de subnotificación en países de renta baja.",
     )
 
     corr_df = cause_correlations(death, le)
@@ -78,8 +80,11 @@ def render(le: pd.DataFrame, panel: pd.DataFrame, death: pd.DataFrame,
     with c2:
         section_header("Causas con mayor impacto positivo", "Sesgo de Supervivencia")
         info_box(
-            "Por un sesgo de supervivencia, enfermedades crónico-degenerativas (cáncer, "
-            "demencias) predominan en poblaciones muy envejecidas. La correlación no es causal."
+            "Sesgo de supervivencia: las enfermedades crónico-degenerativas (cáncer, demencias, "
+            "cardiovasculares) correlacionan positivamente con la EV porque solo se observan en "
+            "poblaciones que ya han superado la mortalidad prematura. Morir de cáncer a los 80 "
+            "es indicador de un sistema que ha erradicado causas de muerte evitables. "
+            "La correlación no implica causalidad."
         )
         if not top_pos.empty:
             st.plotly_chart(_top_causes_chart(top_pos, ACCENT_3, (-0.1, 1.05)),
