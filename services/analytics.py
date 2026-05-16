@@ -11,12 +11,13 @@ def predictor_correlations(panel: pd.DataFrame) -> pd.DataFrame:
     rows = []
     for pred in PREDICTOR_MAP:
         if pred in panel.columns and "life_expectancy" in panel.columns:
-            s = panel[[pred, "life_expectancy"]].dropna()
-            if len(s) > 3:
+            panel_mean = panel.groupby("Code", as_index=False).mean(numeric_only=True)
+            s = panel_mean[[pred, "life_expectancy"]].dropna()
+            y = s["life_expectancy"]
+            if pred == "gdp_per_capita":
                 rows.append({
-                    "Variable":    PREDICTOR_MAP[pred],
-                    "col_orig":    pred,
-                    "Correlación": round(s[pred].corr(s["life_expectancy"]), 3),
+                    x = np.log10(x.clip(lower=1))   # curva de Preston, espejo §3.3
+                    "Correlación": round(x.corr(y), 3),
                 })
     return pd.DataFrame(rows).dropna().sort_values("Correlación")
 
