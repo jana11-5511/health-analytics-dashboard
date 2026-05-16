@@ -38,7 +38,9 @@ def gdp_scatter(pm: pd.DataFrame) -> go.Figure:
 
 def residual_plot(resid: pd.DataFrame, rmse_train: float) -> go.Figure:
     threshold = resid["residual"].std() * 4
-    to_label = resid[resid["residual"].abs() > threshold]
+    to_label = (resid[resid["residual"].abs() > threshold]
+            .sort_values("residual", key=abs, ascending=False)
+            .drop_duplicates(subset="Entity"))
     colors = np.where(resid["residual"] >= 0, ACCENT_3, WARN)
 
     fig = go.Figure()
