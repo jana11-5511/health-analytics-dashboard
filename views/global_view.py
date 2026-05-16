@@ -63,3 +63,4 @@ def render(le: pd.DataFrame) -> None:
         evol = evol[evol["Year"] <= 2019]
         st.plotly_chart(life_expectancy_evolution(evol),
                         use_container_width=True, config=DEFAULT_CONFIG)
+
