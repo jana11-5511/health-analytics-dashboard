@@ -38,9 +38,11 @@ def _render_sliders(mr: ModelResult) -> dict:
 
 def render(le, panel, mr: ModelResult | None) -> None:
     page_header(
-        "Calculadora",
-        "Herramienta interactiva para simular la esperanza de vida según los "
-        "predictores estructurales del modelo.",
+        "Calculadora",         
+        "Simula la esperanza de vida para cualquier combinación de indicadores socioeconómicos. ",         
+        "No se usan etiquetas de 'desarrollado' o 'subdesarrollado': un mismo nivel de PIB ",      
+        "puede coexistir con estructuras sanitarias muy distintas, y cualquier clasificación ",         
+        "binaria añade sesgo sin aportar capacidad predictiva.",
     )
 
     if mr is None:
@@ -52,7 +54,7 @@ def render(le, panel, mr: ModelResult | None) -> None:
     left, right = st.columns([1, 1], gap="large")
 
     with left:
-        st.markdown(\"**Ajusta las variables socioeconómicas**\")
+        st.markdown("**Ajusta las variables socioeconómicas**")
         inputs = _render_sliders(mr)
 
     with right:
