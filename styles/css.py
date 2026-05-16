@@ -146,8 +146,8 @@ def inject_global_css() -> None:
         border-radius: 20px !important;
         padding: 1.1rem 1.15rem 0.9rem 1.15rem;
         box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-        min-height: 115px;
-        overflow: hidden !important;
+        min-height: 130px;
+        overflow: visible !important;
     }}
 
     [data-testid="stHorizontalBlock"] > div:first-child [data-testid="stMetric"] {{
