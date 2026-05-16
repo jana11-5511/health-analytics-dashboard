@@ -1,4 +1,5 @@
 """Interactive calculator view."""
+from typing import Optional
 import streamlit as st
 
 from components.layout import page_header, section_header
