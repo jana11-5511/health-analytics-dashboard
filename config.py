@@ -18,4 +18,8 @@ PREDICTOR_MAP = {
     "MCV1":                    "MCV1 -  Sarampión (%)",
 }
 
-PREDICTOR_LABEL_OVERRIDE = {\n    "gdp_log": "PIB per cápita (USD PPP, log)",\n}\n\nLIFE_EXPECTANCY_COL
+PREDICTOR_LABEL_OVERRIDE = {
+    "gdp_log": "PIB per cápita (USD PPP, log)",
+}
+
+LIFE_EXPECTANCY_COL = "Period life expectancy at birth - Sex: all - Age: 0"
