@@ -41,10 +41,14 @@ def _category_chart(corr_df: pd.DataFrame) -> "go.Figure":
 
 
 def _residuals_frame(le: pd.DataFrame, mr: ModelResult) -> pd.DataFrame:
-    resid = mr.df_train.copy()
+    """
+    Residuos sobre el panel completo (espejo del notebook §5.6, no del
+    train del split). Cada fila es un país-año.
+    """
+    resid = mr.df_full.copy()
     if "Entity" not in resid.columns:
         resid = resid.merge(le[["Code", "Entity"]].drop_duplicates(), on="Code", how="left")
-    resid["pred"]     = mr.train_pred
+    resid["pred"]     = mr.full_pred
     resid["residual"] = resid["life_expectancy"] - resid["pred"]
     return resid
 
@@ -58,14 +62,12 @@ def render(le: pd.DataFrame, panel: pd.DataFrame, death: pd.DataFrame,
         "predictores: la correlación con la EV es moderada y ambas variables presentan "
         "problemas de subnotificación en países de renta baja.",
     )
-
     corr_df = cause_correlations(death, le)
     top_neg = corr_df.head(5) if not corr_df.empty else pd.DataFrame()
     top_pos = (corr_df.tail(5).sort_values("Correlación", ascending=True)
                if not corr_df.empty else pd.DataFrame())
 
     c1, c2 = st.columns(2, gap="large")
-
     with c1:
         section_header("Causas con mayor impacto negativo", "Vulnerabilidad Sanitaria")
         info_box(
@@ -76,7 +78,6 @@ def render(le: pd.DataFrame, panel: pd.DataFrame, death: pd.DataFrame,
         if not top_neg.empty:
             st.plotly_chart(_top_causes_chart(top_neg, NEG, (-1.05, 0.1)),
                             use_container_width=True, config=DEFAULT_CONFIG)
-
     with c2:
         section_header("Causas con mayor impacto positivo", "Sesgo de Supervivencia")
         info_box(
@@ -92,23 +93,23 @@ def render(le: pd.DataFrame, panel: pd.DataFrame, death: pd.DataFrame,
 
     st.markdown("<br>", unsafe_allow_html=True)
     left, right = st.columns([1, 1], gap="large")
-
     with left:
         section_header("Ranking completo — correlación de todas las causas", "Agrupado")
         info_box(
-            "Correlación media de Pearson agrupada en 8 macro-categorías. "
+            "Correlación media de Pearson agrupada en 7 macro-categorías. "
             "Valores negativos señalan categorías asociadas a sistemas sanitarios vulnerables."
         )
         if not corr_df.empty:
             st.plotly_chart(_category_chart(corr_df),
                             use_container_width=True, config=DEFAULT_CONFIG)
-
     with right:
         section_header("Análisis de residuales del modelo", "Identificación de Outliers")
         info_box(
             "Un residual positivo indica que el país rinde por encima de lo que predice "
             "el modelo. Un residual negativo apunta a debilidades estructurales no captadas."
         )
-        if mr and mr.features and len(mr.df_train) > 0:
-            st.plotly_chart(residual_plot(_residuals_frame(le, mr), mr.rmse_train),
+        if mr and mr.features and len(mr.df_full) > 0:
+            # Banda de referencia sobre RMSE CV (métrica honesta), no RMSE train.
+            st.plotly_chart(residual_plot(_residuals_frame(le, mr), mr.rmse_cv),
                             use_container_width=True, config=DEFAULT_CONFIG)
+
