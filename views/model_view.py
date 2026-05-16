@@ -6,7 +6,7 @@ from charts.base import DEFAULT_CONFIG
 from charts.bars import signed_bar
 from charts.scatter import gdp_scatter
 from components.layout import page_header, section_header
-from config import PREDICTOR_MAP
+from config import PREDICTOR_MAP, PREDICTOR_LABEL_OVERRIDE
 from services.analytics import predictor_correlations
 from services.model import ModelResult
 from utils.numeric import safe_log10
@@ -26,7 +26,8 @@ def _correlation_chart(corr_df: pd.DataFrame):
 
 def _coefficient_chart(mr: ModelResult):
     coef = mr.coef.copy()
-    coef.index = [PREDICTOR_MAP.get(i, i) for i in coef.index]
+    label_map = {**PREDICTOR_MAP, **PREDICTOR_LABEL_OVERRIDE}
+    coef.index = [label_map.get(i, i) for i in coef.index]
     coef = coef.sort_values().reset_index()
     coef.columns = ["Variable", "Coef"]
     return signed_bar(
@@ -50,8 +51,10 @@ def _gdp_panel_data(panel: pd.DataFrame, le: pd.DataFrame):
 def render(le: pd.DataFrame, panel: pd.DataFrame, mr: ModelResult | None) -> None:
     page_header(
         "Modelo",
-        "Relación entre predictores estructurales y esperanza de vida: correlaciones, "
-        "importancia de variables y ajuste del modelo.",
+        "Modelo Socioeconómico oficial (OLS): PIB per cápita (log), gasto sanitario, "
+        "pobreza absoluta, DTP3 y MCV1. Se descartó el modelo Composicional porque, aunque "
+        "tiene mayor R², incluye causas de muerte que son componentes del cálculo de la EV "
+        "— lo que convierte la regresión en una tautología. RF y Socioambiental documentados en la memoria.",
     )
 
     if mr is None:
@@ -59,10 +62,10 @@ def render(le: pd.DataFrame, panel: pd.DataFrame, mr: ModelResult | None) -> Non
         return
 
     c1, c2, c3, c4 = st.columns(4)
-    c1.metric("R² en datos de Test", f"{mr.r2_test:.3f}", f"Train R²: {mr.r2_train:.3f}")
-    c2.metric("Predictores", f"{len(mr.available_preds)}", "variables en el modelo")
-    c3.metric("Observaciones", f"{len(mr.df_train):,}", "filas país-año")
-    c4.metric("Error (RMSE Test)", f"{mr.rmse_test:.2f} años", "en predicción final")
+    c1.metric("R² CV GroupKFold(5)", "~0.66", f"Split aleatorio: {mr.r2_test:.3f}")
+    c2.metric("Predictores socioeconómicos", f"{len(mr.available_preds)}", "variables en el modelo")
+    c3.metric("Observaciones", f"{len(mr.df_train):,}", "filas país-año (train)")
+    c4.metric("RMSE CV GroupKFold(5)", f"{mr.rmse_cv:.2f} años", f"Split aleatorio: {mr.rmse_test:.2f} años")
 
     corr_df = predictor_correlations(panel)
     left, right = st.columns([1, 1], gap="large")
@@ -72,7 +75,7 @@ def render(le: pd.DataFrame, panel: pd.DataFrame, mr: ModelResult | None) -> Non
         if not corr_df.empty:
             st.plotly_chart(_correlation_chart(corr_df),
                             use_container_width=True, config=DEFAULT_CONFIG)
-            section_header("Importancia de variables (Modelo Ridge)",
+            section_header("Importancia de variables (Modelo Socioeconómico)",
                            "Coeficientes estandarizados")
             st.plotly_chart(_coefficient_chart(mr),
                             use_container_width=True, config=DEFAULT_CONFIG)
