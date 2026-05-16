@@ -87,6 +87,12 @@ def inject_global_css() -> None:
         padding: 0.5rem 1rem !important;
         transition: all 0.2s ease;
     }}
+
+    /* Amaguem el botó de plegar */
+    [data-testid="collapsedControl"] {{
+        display: none !important;
+    }}
+    
     section[data-testid="stSidebar"] .stRadio > div > label:hover {{
         background: rgba(6,182,212,0.08) !important;
         border-color: rgba(6,182,212,0.25) !important;
