@@ -199,7 +199,7 @@ def inject_global_css() -> None:
         padding: 0 !important;
         margin-top: 0.5rem !important;
         margin-bottom: 1rem !important;
-        overflow: visible !important;
+        overflow: hidden !important;
         color-scheme: light !important;
     }}
     [data-testid="stPlotlyChart"] > div {{
