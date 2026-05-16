@@ -52,7 +52,7 @@ def render(le, panel, mr: ModelResult | None) -> None:
     left, right = st.columns([1, 1], gap="large")
 
     with left:
-        st.markdown("**Ajusta las variables estructurales**")
+        st.markdown(\"**Ajusta las variables socioeconómicas**\")
         inputs = _render_sliders(mr)
 
     with right:
