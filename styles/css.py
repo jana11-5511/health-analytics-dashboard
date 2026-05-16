@@ -69,7 +69,6 @@ def inject_global_css() -> None:
         pointer-events: auto !important;
     }}
 
-    /* Quan Streamlit afegeix la classe collapsed, ignorar-la */
     section[data-testid="stSidebar"][aria-expanded="false"] {{
         min-width: 240px !important;
         width: 240px !important;
@@ -77,13 +76,12 @@ def inject_global_css() -> None:
         visibility: visible !important;
         margin-left: 0 !important;
     }}
-    /* Amaga el botó visualment però no el treu del DOM (el JS el necessita) */
+
     [data-testid="collapsedControl"] {{
         visibility: hidden !important;
         pointer-events: none !important;
     }}
 
-    
     section[data-testid="stSidebar"] * {{ color: #e2e8f0 !important; }}
 
     [data-testid="stSidebarUserContent"] {{
@@ -146,8 +144,8 @@ def inject_global_css() -> None:
         border-radius: 20px !important;
         padding: 1.1rem 1.15rem 0.9rem 1.15rem;
         box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-        min-height: 115px;
-        overflow: hidden !important;
+        min-height: 130px;
+        overflow: visible !important;
     }}
 
     [data-testid="stHorizontalBlock"] > div:first-child [data-testid="stMetric"] {{
@@ -178,6 +176,8 @@ def inject_global_css() -> None:
         color: #64748b !important;
         text-transform: uppercase;
         letter-spacing: 0.07em;
+        white-space: normal !important;
+        line-height: 1.3 !important;
     }}
     [data-testid="stMetricValue"] div {{
         font-size: 1.55rem !important;
@@ -187,6 +187,9 @@ def inject_global_css() -> None:
     [data-testid="stMetricDelta"] {{
         color: {ACCENT} !important;
         font-weight: 600 !important;
+        white-space: normal !important;
+        font-size: 0.75rem !important;
+        line-height: 1.3 !important;
     }}
     [data-testid="stMetricDelta"] svg {{ display: none !important; }}
 
@@ -254,7 +257,7 @@ def inject_global_css() -> None:
         overflow: hidden;
     }}
 
-    /* DARK MODE — força light en tot l'app */
+    /* DARK MODE */
     @media (prefers-color-scheme: dark) {{
         :root {{ color-scheme: light !important; }}
         html, body, .stApp {{ background: {BG} !important; }}
@@ -270,10 +273,6 @@ def inject_global_css() -> None:
         [data-testid="stMetric"] {{
             background: #FFFFFF !important;
         }}
-    }}
-    
-    [data-testid="collapsedControl"] {{
-        display: none !important;
     }}
     </style>
 
