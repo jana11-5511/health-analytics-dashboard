@@ -1,6 +1,5 @@
 """Interactive calculator view."""
 from typing import Optional
-
 import streamlit as st
 
 from components.layout import page_header, section_header
@@ -11,19 +10,15 @@ from utils.numeric import safe_slider_range
 
 
 def _render_sliders(mr: ModelResult) -> dict:
-    """Render one slider per predictor and return their current values.
-
-    Los rangos y la mediana se calculan sobre el panel completo
-    (`mr.df_full`), no sobre el train del split.
-    """
+    """Render one slider per predictor and return their current values."""
     sliders: dict = {}
     for pred in mr.available_preds:
-        if pred not in mr.df_full.columns:
+        if pred not in mr.df_train.columns:
             continue
 
-        default = float(mr.df_full[pred].median())
-        q05 = float(mr.df_full[pred].quantile(0.05))
-        q95 = float(mr.df_full[pred].quantile(0.95))
+        default = float(mr.df_train[pred].median())
+        q05     = float(mr.df_train[pred].quantile(0.05))
+        q95     = float(mr.df_train[pred].quantile(0.95))
         low, high, val = safe_slider_range(q05, q95, default)
 
         step = max((high - low) / 100, 0.01)
@@ -45,10 +40,10 @@ def _render_sliders(mr: ModelResult) -> dict:
 def render(le, panel, mr: Optional[ModelResult] = None) -> None:
     page_header(
         "Calculadora",
-        "Simula la esperanza de vida para cualquier combinación de indicadores "
-        "socioeconómicos. No se usan etiquetas de 'desarrollado' o 'subdesarrollado': "
-        "un mismo nivel de PIB puede coexistir con estructuras sanitarias muy distintas, "
-        "y cualquier clasificación binaria añade sesgo sin aportar capacidad predictiva.",
+        "Simula la esperanza de vida para cualquier combinación de indicadores socioeconómicos."
+        "No se usan etiquetas de 'desarrollado' o 'subdesarrollado': un mismo nivel de PIB"
+        "puede coexistir con estructuras sanitarias muy distintas, y cualquier clasificación"
+        "binaria añade sesgo sin aportar capacidad predictiva.",
     )
 
     if mr is None:
@@ -65,7 +60,6 @@ def render(le, panel, mr: Optional[ModelResult] = None) -> None:
 
     with right:
         with st.spinner("Calculando predicción..."):
-            pred = predict_life_expectancy(mr, inputs)
+            pred       = predict_life_expectancy(mr, inputs)
             global_avg = float(le[le["Year"] == 2019]["life_expectancy"].mean())
             render_prediction_card(pred, global_avg, mr)
-, mr)
