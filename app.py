@@ -6,7 +6,10 @@ from config import PAGE_CONFIG
 from services.data_loader import load_data
 from services.model import train_model
 from styles.css import inject_global_css
-from views import calculator_view, deaths_view, global_view, model_view
+from views import calculator_view
+from views import deaths_view
+from views import global_view
+from views import model_view
 
 _ROUTES = {
     "Exploración global": lambda le, panel, death, mr: global_view.render(le),
