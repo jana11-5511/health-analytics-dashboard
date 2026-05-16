@@ -66,7 +66,7 @@ def render(le: pd.DataFrame, panel: pd.DataFrame, mr: ModelResult | None) -> Non
     c1.metric("R² CV GroupKFold(5)", f"{mr.r2_cv:.3f}", f"Split aleatorio: {mr.r2_test:.3f}")
     c2.metric("Predictores socioeconómicos", f"{len(mr.available_preds)}", "variables en el modelo")
     c3.metric("Observaciones", f"{len(mr.df_train):,}", "filas país-año")
-    c4.metric("RMSE CV GroupKFold(5)", f"{mr.rmse_test:.2f} años", f"Split aleatorio: {mr.rmse_test:.2f} años")
+    c4.metric("RMSE CV GroupKFold(5)", f"{mr.mr.rmse_cv:.2f} años", f"Split aleatorio: {mr.rmse_test:.2f} años")
 
     corr_df = predictor_correlations(panel)
     left, right = st.columns([1, 1], gap="large")
