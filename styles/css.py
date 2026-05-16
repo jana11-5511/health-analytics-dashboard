@@ -118,7 +118,7 @@ def inject_global_css() -> None:
 
     /* KPI */
     [data-testid="stMetric"] {{
-        position: fixed;
+        position: relative;
         background: #FFFFFF !important;
         border: 1px solid {LINE} !important;
         border-radius: 20px !important;
