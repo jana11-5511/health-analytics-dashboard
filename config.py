@@ -11,7 +11,7 @@ PAGE_CONFIG = {
 PAGES = ("Exploración global", "Modelo", "Calculadora", "Causas de muerte")
 
 PREDICTOR_MAP = {
-    "gdp_per_capita":          "PIB per cápita (USD PPP, log",
+    "gdp_per_capita":          "PIB per cápita (USD PPP, log)",
     "health_spending_pct_gdp": "Gasto en Salud (% PIB)",
     "share_below_6_85":        "Pob. bajo umbral pobreza (%)",
     "DTP3":                    "Inmunización DTP3 (%)",
