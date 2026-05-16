@@ -10,8 +10,8 @@ def render_prediction_card(pred: float, global_avg: float, mr: ModelResult) -> N
     diff_color = ACCENT_3 if diff >= 0 else WARN
     diff_sign = "+" if diff >= 0 else ""
     pct = (pred - 40) / (90 - 40) * 100
-    lo = max(40, pred - 2 * mr.rmse_cv)\n hi = min(90, pred + 2 * mr.rmse_cv)
-    hi = min(90, pred + 1.96 * mr.resid_std)
+    lo = max(40, pred - 2 * mr.rmse_cv)
+    hi = min(90, pred + 2 * mr.rmse_cv)
 
     st.markdown(f"""
     <div style="background:#FFFFFF; border-radius:16px; border:1px solid {LINE};
