@@ -28,5 +28,5 @@ def main() -> None:
     _ROUTES[page](le, panel, death, mr)
  
  
-if _name_ == "_main_":
+if __name__ == "_main_":
     main()
