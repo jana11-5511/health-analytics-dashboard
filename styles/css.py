@@ -65,7 +65,25 @@ def inject_global_css() -> None:
         transform: none !important;
         visibility: visible !important;
         display: block !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
     }}
+
+    /* Quan Streamlit afegeix la classe collapsed, ignorar-la */
+    section[data-testid="stSidebar"][aria-expanded="false"] {{
+        min-width: 240px !important;
+        width: 240px !important;
+        transform: translateX(0) !important;
+        visibility: visible !important;
+        margin-left: 0 !important;
+    }}
+    /* Amaga el botó visualment però no el treu del DOM (el JS el necessita) */
+    [data-testid="collapsedControl"] {{
+        visibility: hidden !important;
+        pointer-events: none !important;
+    }}
+
+    
     section[data-testid="stSidebar"] * {{ color: #e2e8f0 !important; }}
 
     [data-testid="stSidebarUserContent"] {{
