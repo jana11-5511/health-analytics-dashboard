@@ -6,8 +6,7 @@ from charts.base import DEFAULT_CONFIG
 from charts.bars import signed_bar
 from charts.scatter import gdp_scatter
 from components.layout import page_header, section_header
-from config import PREDICTOR_LABEL_OVERRIDE 
-from config import PREDICTOR_MAP
+from config import PREDICTOR_LABEL_OVERRIDE, PREDICTOR_MAP
 from services.analytics import predictor_correlations
 from services.model import ModelResult
 from utils.numeric import safe_log10
@@ -25,9 +24,11 @@ def _correlation_chart(corr_df: pd.DataFrame):
     )
 
 
-def _coefficient_chart(mr: ModelResult):     
-    coef = mr.coef.copy()     
-    label_map = {**PREDICTOR_MAP, **PREDICTOR_LABEL_OVERRIDE}     
+def _coefficient_chart(mr: ModelResult):
+    # Coeficientes del modelo entrenado sobre el panel completo (espejo
+    # del notebook §5.6 con `model_se_full`, no del train del split).
+    coef = mr.coef_full.copy()
+    label_map = {**PREDICTOR_MAP, **PREDICTOR_LABEL_OVERRIDE}
     coef.index = [label_map.get(i, i) for i in coef.index]
     coef = coef.sort_values().reset_index()
     coef.columns = ["Variable", "Coef"]
@@ -55,18 +56,37 @@ def render(le: pd.DataFrame, panel: pd.DataFrame, mr: ModelResult | None) -> Non
         "Modelo Socioeconómico oficial (OLS): PIB per cápita (log), gasto sanitario, "
         "pobreza absoluta, DTP3 y MCV1. Se descartó el modelo Composicional porque, aunque "
         "tiene mayor R², incluye causas de muerte que son componentes del cálculo de la EV "
-        "— lo que convierte la regresión en una tautología. RF y Socioambiental documentados en la memoria.",
+        "— lo que convierte la regresión en una tautología. RF y Socioambiental documentados "
+        "en la memoria.",
     )
 
     if mr is None:
         st.warning("Datos insuficientes para el modelo.")
         return
 
+    # KPI cards — métricas honestas: R² y RMSE del CV GroupKFold(5) como
+    # valor principal; delta muestra el test del split por país como contexto.
     c1, c2, c3, c4 = st.columns(4)
-    c1.metric("R² CV GroupKFold(5)", f"{mr.r2_cv:.3f}", f"Split aleatorio: {mr.r2_test:.3f}")
-    c2.metric("Predictores socioeconómicos", f"{len(mr.available_preds)}", "variables en el modelo")
-    c3.metric("Observaciones", "1460", "filas país-año")
-    c4.metric("RMSE CV GroupKFold(5)", f"{mr.rmse_cv:.2f} años", f"Split aleatorio: {mr.rmse_test:.2f} años")
+    c1.metric(
+        "R² CV GroupKFold(5)",
+        f"{mr.r2_cv:.3f}",
+        f"Test split por país: {mr.r2_test:.3f}",
+    )
+    c2.metric(
+        "Predictores socioeconómicos",
+        f"{len(mr.available_preds)}",
+        "variables en el modelo",
+    )
+    c3.metric(
+        "Observaciones",
+        f"{len(mr.df_full):,}",
+        "filas país-año (panel completo)",
+    )
+    c4.metric(
+        "RMSE CV GroupKFold(5)",
+        f"{mr.rmse_cv:.2f} años",
+        f"Test split por país: {mr.rmse_test:.2f} años",
+    )
 
     corr_df = predictor_correlations(panel)
     left, right = st.columns([1, 1], gap="large")
@@ -74,15 +94,22 @@ def render(le: pd.DataFrame, panel: pd.DataFrame, mr: ModelResult | None) -> Non
     with left:
         section_header("Ranking de correlaciones con la EV", "Análisis Bivariante")
         if not corr_df.empty:
-            st.plotly_chart(_correlation_chart(corr_df),
-                            use_container_width=True, config=DEFAULT_CONFIG)
-            section_header("Importancia de variables (Modelo Socioeconómico)",
-                           "Coeficientes estandarizados")
-            st.plotly_chart(_coefficient_chart(mr),
-                            use_container_width=True, config=DEFAULT_CONFIG)
+            st.plotly_chart(
+                _correlation_chart(corr_df),
+                use_container_width=True, config=DEFAULT_CONFIG,
+            )
+        section_header(
+            "Importancia de variables (Modelo Socioeconómico)",
+            "Coeficientes estandarizados",
+        )
+        st.plotly_chart(
+            _coefficient_chart(mr),
+            use_container_width=True, config=DEFAULT_CONFIG,
+        )
 
     with right:
         section_header("Relación PIB per cápita – esperanza de vida", "Dispersión")
         pm = _gdp_panel_data(panel, le)
         if pm is not None and len(pm):
             st.plotly_chart(gdp_scatter(pm), use_container_width=True, config=DEFAULT_CONFIG)
+
