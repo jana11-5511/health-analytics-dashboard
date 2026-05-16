@@ -147,7 +147,7 @@ def inject_global_css() -> None:
         padding: 1.1rem 1.15rem 0.9rem 1.15rem;
         box-shadow: 0 4px 20px rgba(0,0,0,0.05);
         min-height: 115px;
-        overflow: visible !important;
+        overflow: hidden !important;
     }}
 
     [data-testid="stHorizontalBlock"] > div:first-child [data-testid="stMetric"] {{
@@ -199,7 +199,7 @@ def inject_global_css() -> None:
         padding: 0 !important;
         margin-top: 0.5rem !important;
         margin-bottom: 1rem !important;
-        overflow: hidden !important;
+        overflow: visible !important;
         color-scheme: light !important;
     }}
     [data-testid="stPlotlyChart"] > div {{
