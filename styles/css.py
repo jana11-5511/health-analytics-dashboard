@@ -85,7 +85,7 @@ def inject_global_css() -> None:
         border-radius: 12px !important;
         margin-bottom: 0.6rem !important;
         padding: 0.5rem 1rem !important;
-        transition: all 0.2s ease;
+        transition: none;
     }}
     section[data-testid="stSidebar"] .stRadio > div > label:hover {{
         background: rgba(6,182,212,0.08) !important;
@@ -118,7 +118,7 @@ def inject_global_css() -> None:
 
     /* KPI */
     [data-testid="stMetric"] {{
-        position: relative;
+        position: fixed;
         background: #FFFFFF !important;
         border: 1px solid {LINE} !important;
         border-radius: 20px !important;
