@@ -30,7 +30,7 @@ def _category_chart(corr_df: pd.DataFrame) -> "go.Figure":
     corr_df = corr_df.copy()
     corr_df["Categoría"] = corr_df["Causa"].apply(categorize_cause)
     cat = (corr_df.groupby("Categoría", as_index=False)["Correlación"]
-                  .mean()
+                  .mean(numeric_only=True)
                   .sort_values("Correlación"))
     return signed_bar(
         cat, value_col="Correlación", label_col="Categoría",
@@ -53,8 +53,7 @@ def _residuals_frame(le: pd.DataFrame, mr: ModelResult) -> pd.DataFrame:
     return resid
 
 
-def render(le: pd.DataFrame, panel: pd.DataFrame, death: pd.DataFrame,
-           mr: ModelResult | None) -> None:
+def render(le: pd.DataFrame, panel: pd.DataFrame, death: pd.DataFrame, mr) -> None:
     page_header(
         "Causas de Muerte",
         "Correlaciones entre las principales causas de muerte y la esperanza de vida. "
@@ -109,7 +108,6 @@ def render(le: pd.DataFrame, panel: pd.DataFrame, death: pd.DataFrame,
             "el modelo. Un residual negativo apunta a debilidades estructurales no captadas."
         )
         if mr and mr.features and len(mr.df_full) > 0:
-            # Banda de referencia sobre RMSE CV (métrica honesta), no RMSE train.
             st.plotly_chart(residual_plot(_residuals_frame(le, mr), mr.rmse_cv),
                             use_container_width=True, config=DEFAULT_CONFIG)
 
