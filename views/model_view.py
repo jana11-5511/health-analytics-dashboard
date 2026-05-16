@@ -30,42 +30,28 @@ def _coefficient_chart(mr: ModelResult):
     coef = mr.coef_full.copy()
     label_map = {**PREDICTOR_MAP, **PREDICTOR_LABEL_OVERRIDE}
     coef.index = [label_map.get(i, i) for i in coef.index]
-    coef = coef.sort_values().reset_index()
-    coef.columns = ["Variable", "Coef"]
+    coef = coef.sort_values()
+
     return signed_bar(
-        coef, value_col="Coef", label_col="Variable",
-        height=300, x_title="Impacto relativo en Años (Estandarizado)",
-        value_fmt="{:+.2f}",
-        hovertemplate="<b>%{y}</b><br>Coeficiente: %{x:+.3f}<extra></extra>",
+        pd.DataFrame({"Variable": coef.index, "Coeficiente": coef.values}),
+        value_col="Coeficiente", label_col="Variable",
+        height=380, x_title="Coeficiente estandarizado (Beta)",
+        hovertemplate="<b>%{y}</b><br>Beta = %{x:+.3f}<extra></extra>",
     )
 
 
-@st.cache_data(show_spinner=False)
-def _gdp_panel_data(panel: pd.DataFrame, le: pd.DataFrame):
-    if not {"gdp_per_capita", "life_expectancy", "Code"}.issubset(panel.columns):
-        return None
-    pm = panel.groupby("Code", as_index=False).mean(numeric_only=True)
-    pm = pm.merge(le[["Code", "Entity"]].drop_duplicates(), on="Code", how="left")
-    pm["gdp_log"] = safe_log10(pm["gdp_per_capita"])
-    return pm.dropna(subset=["gdp_log", "life_expectancy", "Entity"])
-
-
-def render(le: pd.DataFrame, panel: pd.DataFrame, mr: ModelResult | None) -> None:
+def render(le: pd.DataFrame, panel: pd.DataFrame, mr) -> None:
     page_header(
-        "Modelo",
-        "Modelo Socioeconómico oficial (OLS): PIB per cápita (log), gasto sanitario, "
-        "pobreza absoluta, DTP3 y MCV1. Se descartó el modelo Composicional porque, aunque "
-        "tiene mayor R², incluye causas de muerte que son componentes del cálculo de la EV "
-        "— lo que convierte la regresión en una tautología. RF y Socioambiental documentados "
-        "en la memoria.",
+        "Mecanismo del Modelo",
+        "Análisis de la capacidad predictiva y estructura del modelo socioeconómico "
+        "con validación cruzada por bloques (GroupKFold por país).",
     )
 
     if mr is None:
-        st.warning("Datos insuficientes para el modelo.")
+        st.warning("No se pudo inicializar el modelo matemático debido a la falta de variables.")
         return
 
-    # KPI cards — métricas honestas: R² y RMSE del CV GroupKFold(5) como
-    # valor principal; delta muestra el test del split por país como contexto.
+    # Tarjetas métricas con el RMSE CV y R² CV real como contexto.
     c1, c2, c3, c4 = st.columns(4)
     c1.metric(
         "R² CV GroupKFold(5)",
@@ -108,8 +94,10 @@ def render(le: pd.DataFrame, panel: pd.DataFrame, mr: ModelResult | None) -> Non
         )
 
     with right:
-        section_header("Relación PIB per cápita – esperanza de vida", "Dispersión")
-        pm = _gdp_panel_data(panel, le)
-        if pm is not None and len(pm):
-            st.plotly_chart(gdp_scatter(pm), use_container_width=True, config=DEFAULT_CONFIG)
+        section_header("El efecto cóncavo del ingreso económico", "Curva de Preston")
+        # El scatter del notebook usa datos de panel completo (espejo del §3.3)
+        st.plotly_chart(
+            gdp_scatter(mr.df_full),
+            use_container_width=True, config=DEFAULT_CONFIG,
+        )
 
