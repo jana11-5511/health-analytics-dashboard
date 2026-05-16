@@ -57,22 +57,16 @@ def inject_global_css() -> None:
         user-select: none;
     }}
 
-    /* SIDEBAR — sempre visible, boto de plegar amagat */
+    /* SIDEBAR */
     section[data-testid="stSidebar"] {{
         background: #0F172A !important;
         border-right: 1px solid rgba(255,255,255,0.05);
         min-width: 240px !important;
-        max-width: 300px !important;
         transform: none !important;
         visibility: visible !important;
         display: block !important;
     }}
     section[data-testid="stSidebar"] * {{ color: #e2e8f0 !important; }}
-
-    [data-testid="collapsedControl"],
-    button[kind="header"] {{
-        display: none !important;
-    }}
 
     [data-testid="stSidebarUserContent"] {{
         padding-top: 0.5rem !important;
@@ -242,7 +236,7 @@ def inject_global_css() -> None:
         overflow: hidden;
     }}
 
-    /* DARK MODE */
+    /* DARK MODE — força light en tot l'app */
     @media (prefers-color-scheme: dark) {{
         :root {{ color-scheme: light !important; }}
         html, body, .stApp {{ background: {BG} !important; }}
@@ -259,6 +253,10 @@ def inject_global_css() -> None:
             background: #FFFFFF !important;
         }}
     }}
+    
+    [data-testid="collapsedControl"] {{
+        display: none !important;
+    }}
     </style>
 
     <script>
@@ -271,4 +269,5 @@ def inject_global_css() -> None:
         };
         setInterval(keepSidebarOpen, 300);
     </script>
+                
     """, unsafe_allow_html=True)
